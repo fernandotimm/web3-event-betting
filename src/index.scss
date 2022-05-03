@@ -1,0 +1,12 @@
+@import 'styles/all';
+
+body {
+  background: $colorSecondary;
+  margin: 0;
+  font-family: "Roboto Condensed", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 10px;
+  color: $colorWhite;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

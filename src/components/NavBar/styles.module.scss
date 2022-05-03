@@ -1,0 +1,11 @@
+@import '../../styles/all';
+
+.navbarContainer {
+  width: 100vw;
+  height: 5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  align-items: center;
+  padding: 20px;
+}
