@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { chain, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { simplifyWalletAddress } from '../../utils/commons';
 
@@ -7,7 +7,9 @@ const WalletWidget = () => {
 
   const { data } = useAccount();
   const { connect } = useConnect({
-    connector: new InjectedConnector(),
+    connector: new InjectedConnector({
+      chains: [chain.ropsten],
+    }),
   });
   const { disconnect } = useDisconnect();
 
