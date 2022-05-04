@@ -19,14 +19,20 @@
     flex-direction: column;
 
     .question {
+      border: 0;
+      border-radius: 6px;
       font-weight: 600;
+      background: $colorLightPurple16;
+      color: $colorWhite;
+      outline: none;
+      padding: 3px 10px;
     }
 
     .outcomes {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
-      padding: 20px 0;
+      padding: 15px 0 15px;
       .outcome {
         background: transparent;
         color: $colorWhite;
@@ -35,59 +41,26 @@
         border: 1px solid;
         width: fit-content;
         padding: 5px 10px;
-        max-width: 100px;
-        min-width: 50px;
+        max-width: 80px;
+        // min-width: 50px;
         text-align: center;
         font-size: 1rem;
-
-        user-select: none;
-        cursor: pointer;
+        outline: none;
 
         &:nth-child(1) {
           border-color: $colorChoiceColorOne;
-          &.active {
-            background: $colorChoiceColorOne20;
-            font-weight: 700;
-          }
         }
         &:nth-child(2) {
           border-color: $colorChoiceColorTwo;
-          &.active {
-            background: $colorChoiceColorTwo20;
-            font-weight: 700;
-          }
         }
         &:nth-child(3) {
           border-color: $colorChoiceColorThree;
-          &.active {
-            background: $colorChoiceColorThree20;
-            font-weight: 700;
-          }
         }
         &:nth-child(4) {
           border-color: $colorChoiceColorFour;
-          &.active {
-            background: $colorChoiceColorFour20;
-            font-weight: 700;
-          }
         }
-      }
-    }
 
-    .amountBet {
-      display: flex;
-      column-gap: 5px;
-      align-items: center;
-      padding: 0 0 10px;
 
-      & > input {
-        width: 150px;
-        text-align: right;
-        border-radius: 6px;
-        border: 0;
-        background: $colorLightPurple16;
-        color: $colorWhite;
-        outline: none;
       }
     }
 

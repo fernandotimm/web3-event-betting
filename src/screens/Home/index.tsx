@@ -5,12 +5,15 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import MarketCard from '../../components/MarketCard';
 import useConnectedContract from '../../hooks/useConnectedContract';
+import CreateMarketCard from '../../components/CreateMarketCard';
 
 interface Market {
   id: string,
   question: string,
+  image: string,
   outcomes: string[],
-  value: number
+  state: number,
+  totalStake: number
 }
 
 const Home = () => {
@@ -21,20 +24,24 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const lastIdxBN:BigNumberish = await contract?.marketIndex();
+      const lastIdxBN:BigNumberish = await contract?.getMarketIndex();
+      // console.log(lastIdxBN);
       const lastIdx:number = +lastIdxBN.toString();
       setLastIndex(lastIdx);
 
       const marketsArray : Market[] = [];
 
-      for (let i:number = 0; i < lastIdx; i++) {
+      for (let i:number = 1; i <= lastIdx; i++) {
         const market = await contract?.getMarket(i);
-        const outcomes:string[] = market[1].map((hexOutcome:string) => { return ethers.utils.parseBytes32String(hexOutcome)});
+        // console.log(market);
+        const outcomes:string[] = market[2].map((hexOutcome:string) => { return ethers.utils.parseBytes32String(hexOutcome)});
         marketsArray.push({
           id: String(i),
           question: market[0],
+          image: market[1],
           outcomes: outcomes,
-          value: market[2],
+          state: market[3],
+          totalStake: market[4]
         })
       }
 
@@ -57,6 +64,7 @@ const Home = () => {
           {markets?.map((market, index) => (
             <MarketCard key={index} market={market} />
           ))}
+          <CreateMarketCard />
         </div>
       </>}
     </div>

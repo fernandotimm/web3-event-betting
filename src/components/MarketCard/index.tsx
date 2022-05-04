@@ -8,8 +8,10 @@ import styles from './styles.module.scss';
 interface Market {
   id: string,
   question: string,
+  image: string,
   outcomes: string[],
-  value: number
+  state: number,
+  totalStake: number,
 }
 
 type Props = {
@@ -17,7 +19,6 @@ type Props = {
 }
 
 const MarketCard = ({market}:Props) => {
-
   const { contract } = useConnectedContract();
   const [selectedOutcome, setSelectedOutcome] = useState<number>();
   const [betAmount, setBetAmount] = useState<number>(0.01);
@@ -53,7 +54,7 @@ const MarketCard = ({market}:Props) => {
         <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>rETH</span></span>
         <button onClick={handlePlaceBet}>Place Bet</button>
       </div>
-      <div className={styles.liquidity}>Liquidity: {market.value}</div>
+      {/* <div className={styles.liquidity}>Liquidity: {market.totalStake}</div> */}
     </div>
   )
 }
