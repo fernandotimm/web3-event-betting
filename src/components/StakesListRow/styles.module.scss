@@ -1,0 +1,21 @@
+@import '../../styles/all';
+
+.stakeRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+
+  & > button {
+    border-radius: 5px;
+    border: 1px solid $colorTertiary;
+    font-weight: 900;
+    cursor: pointer;
+    background: transparent;
+    color: $colorWhite;
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+}

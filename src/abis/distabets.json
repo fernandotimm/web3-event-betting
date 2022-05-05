@@ -167,11 +167,6 @@
                 "type": "string"
             },
             {
-                "internalType": "bytes32[]",
-                "name": "",
-                "type": "bytes32[]"
-            },
-            {
                 "internalType": "enum Distamarkets.MarketState",
                 "name": "",
                 "type": "uint8"
@@ -180,6 +175,16 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            },
+            {
+                "internalType": "bytes32[]",
+                "name": "",
+                "type": "bytes32[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
             }
         ],
         "stateMutability": "view",
@@ -324,11 +329,6 @@
             {
                 "internalType": "uint256",
                 "name": "_stakeId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_marketId",
                 "type": "uint256"
             },
             {

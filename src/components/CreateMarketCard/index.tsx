@@ -35,7 +35,7 @@ const CreateMarketCard = () => {
     <div className={styles.marketContainer}>
       <div className={styles.questionContainer}>
 
-        <input type="text" className={styles.question} value={title} onChange={handleTitleChange} />
+        <input type="text" className={styles.question} value={title} onChange={handleTitleChange} placeholder="Add question" />
 
         <div className={styles.outcomes}>
           {outcomes?.map((outcome, index) => (
@@ -49,8 +49,9 @@ const CreateMarketCard = () => {
           <button onClick={handleAddOutcome}>+</button>
         </div>
         {/* <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>rETH</span></span> */}
-        <button onClick={handleCreateMarket}>Create Event</button>
+
       </div>
+      <button onClick={handleCreateMarket}>Create Event</button>
     </div>
   )
 }
