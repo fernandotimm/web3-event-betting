@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import MarketCard from '../../components/MarketCard';
 import useConnectedContract from '../../hooks/useConnectedContract';
 import CreateMarketCard from '../../components/CreateMarketCard';
+import StakesList from '../../components/StakesList';
 
 interface Market {
   id: string,
@@ -34,14 +35,14 @@ const Home = () => {
       for (let i:number = 1; i <= lastIdx; i++) {
         const market = await contract?.getMarket(i);
         // console.log(market);
-        const outcomes:string[] = market[2].map((hexOutcome:string) => { return ethers.utils.parseBytes32String(hexOutcome)});
+        const outcomes:string[] = market[4].map((hexOutcome:string) => { return ethers.utils.parseBytes32String(hexOutcome)});
         marketsArray.push({
           id: String(i),
           question: market[0],
           image: market[1],
           outcomes: outcomes,
-          state: market[3],
-          totalStake: market[4]
+          state: market[2],
+          totalStake: market[3]
         })
       }
 
@@ -66,6 +67,8 @@ const Home = () => {
           ))}
           <CreateMarketCard />
         </div>
+
+        <StakesList />
       </>}
     </div>
   )
