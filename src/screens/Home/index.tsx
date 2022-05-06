@@ -7,6 +7,7 @@ import MarketCard from '../../components/MarketCard';
 import useConnectedContract from '../../hooks/useConnectedContract';
 import CreateMarketCard from '../../components/CreateMarketCard';
 import StakesList from '../../components/StakesList';
+import EventsList from '../../components/EventsList';
 
 interface Market {
   id: string,
@@ -69,6 +70,7 @@ const Home = () => {
         </div>
 
         <StakesList />
+        <EventsList />
       </>}
     </div>
   )

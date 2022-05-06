@@ -1,9 +1,22 @@
 @import '../../styles/all';
 
 .stakeRow {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr;
+  gap: 10px;
   padding: 5px 0;
+  align-items: center;
+
+  .amount {
+    text-align: right;
+  }
+
+  @media (max-width:$screen-sm) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    .user {
+      display: none;
+    }
+  }
 
   & > button {
     border-radius: 5px;
@@ -12,6 +25,7 @@
     cursor: pointer;
     background: transparent;
     color: $colorWhite;
+    height: 30px;
 
     &:disabled {
       opacity: 0.3;

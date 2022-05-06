@@ -1,70 +1,63 @@
-import { ethers } from 'ethers';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import useConnectedContract from '../../hooks/useConnectedContract';
+import { simplifyWalletAddress } from '../../utils/commons';
 import styles from './styles.module.scss';
 
-interface UserStake {
-  stakeId: string;
+interface StakeChangedArgs {
+  stakeId: string,
   marketId: string,
-  outcomeId: string,
   amount: string,
   user: string,
 }
 
-interface MarketStake {
+interface MarketCreatedArgs {
+  creator: string,
+  marketId: string,
+  name: string,
+}
+
+type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string };
+
+interface MarketData {
   question: string,
-  outcome: string,
 }
 
 type Props = {
-  stake: UserStake;
+  event: EventArgs;
 }
 
-const EventsListRow = ({stake}:Props) => {
+const EventsListRow = ({event}:Props) => {
   const { data } = useAccount();
   const { contract } = useConnectedContract();
   const [marketQuestion, setMarketQuestion] = useState<string>();
-  const [outcome, setOutcome] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
 
-      const marketData = await contract?.getMarket(stake.marketId);
-      // console.log({marketData});
+      const marketData = await contract?.getMarket(event.marketId);
+      // console.log(marketData);
       const question:string = marketData[0].toString();
-      const selectedOutcome:string = marketData[4].map((hexOutcome:string) => {
-        return ethers.utils.parseBytes32String(hexOutcome)
-      }).find((outcome:string,index:number) => {
-        return index === +stake.outcomeId
-      });
 
-      const market:MarketStake = {
+      const market:MarketData = {
         question,
-        outcome: selectedOutcome,
       }
 
       setMarketQuestion(market.question);
-      setOutcome(market.outcome);
     }
 
     if (data && contract) {
       fetchData();
     }
-  }, [data, contract, stake]);
-
-
-  const handleCashout = useCallback(() => {
-    contract?.removeStake(stake.stakeId, String(stake.amount));
-  }, [contract, stake.amount, stake.stakeId]);
+  }, [data, contract, event]);
 
   return (
     <div className={styles.stakeRow}>
+      <span>{event.eventName}</span>
       <span>{marketQuestion}</span>
-      <span>{outcome}</span>
-      <span>{+stake.amount / 10**18} rETH</span>
-      <button disabled={(+stake.amount / 10**18) === 0} onClick={handleCashout}>Cashout</button>
+      <span className={styles.user}>{event.user && simplifyWalletAddress(event.user)}</span>
+      <span className={styles.amount}>{event.amount && `${event.amount} rETH`}</span>
     </div>
   )
 }

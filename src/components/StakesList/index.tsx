@@ -46,6 +46,12 @@ const StakesList = () => {
   return (
     <div className={styles.stakesListContainer}>
       <h3>My Stakes</h3>
+      <div className={styles.headerRow}>
+        <span>Market</span>
+        <span>Outcome</span>
+        <span className={styles.amount}>Amount</span>
+        <span></span>
+      </div>
       {stakes.length > 0 && stakes?.map((stake:UserStake, index:number) => (
         <StakesListRow key={index} stake={stake} />
       ))}

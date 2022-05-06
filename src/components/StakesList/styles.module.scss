@@ -3,5 +3,25 @@
 .stakesListContainer {
   display: flex;
   flex-direction: column;
-  max-width: 500px;
+  max-width: 800px;
+  padding-top: 20px;
+
+  .headerRow {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 20px 0;
+    font-weight: 600;
+
+    .amount {
+      text-align: right;
+    }
+
+    @media (max-width:$screen-sm) {
+      grid-template-columns: 1fr 1fr 1fr;
+      .user {
+        display: none;
+      }
+    }
+  }
 }
