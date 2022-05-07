@@ -56,6 +56,15 @@ const Home = () => {
     }
   }, [data, contract]);
 
+  if (!data?.connector) {
+    return (
+      <div className={styles.homeContainer}>
+        <p>Connect your wallet to see the markets</p>
+        <EventsList connected={false} />
+      </div>
+    )
+  }
+
   return (
     <div className={styles.homeContainer}>
       {data?.connector && <>
@@ -70,8 +79,9 @@ const Home = () => {
         </div>
 
         <StakesList />
-        <EventsList />
+
       </>}
+      <EventsList />
     </div>
   )
 }

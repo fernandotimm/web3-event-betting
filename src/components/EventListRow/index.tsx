@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
@@ -26,9 +27,10 @@ interface MarketData {
 
 type Props = {
   event: EventArgs;
+  connected: boolean;
 }
 
-const EventsListRow = ({event}:Props) => {
+const EventsListRow = ({event, connected}:Props) => {
   const { data } = useAccount();
   const { contract } = useConnectedContract();
   const [marketQuestion, setMarketQuestion] = useState<string>();
@@ -53,9 +55,9 @@ const EventsListRow = ({event}:Props) => {
   }, [data, contract, event]);
 
   return (
-    <div className={styles.stakeRow}>
+    <div className={classNames(styles.stakeRow, connected ? styles.connected : null)}>
       <span>{event.eventName}</span>
-      <span>{marketQuestion}</span>
+      {connected && <span>{marketQuestion}</span>}
       <span className={styles.user}>{event.user && simplifyWalletAddress(event.user)}</span>
       <span className={styles.amount}>{event.amount && `${event.amount} rETH`}</span>
     </div>

@@ -8,10 +8,14 @@
 
   .headerRow {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
     padding: 20px 0;
     font-weight: 600;
+
+    &.connected {
+      grid-template-columns: 1fr 3fr 1fr 1fr;
+    }
 
     .amount {
       text-align: right;
@@ -19,6 +23,9 @@
 
     @media (max-width:$screen-sm) {
       grid-template-columns: 1fr 1fr 1fr;
+      &.connected {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
       .user {
         display: none;
       }
