@@ -1,10 +1,9 @@
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
-import useConnectedContract from '../../hooks/useConnectedContract';
 import styles from './styles.module.scss';
 import distabetsABI from "../../abis/distabets.json";
 import EventsListRow from '../EventListRow';
+import classNames from 'classnames';
 
 interface StakeChangedArgs {
   stakeId: string,
@@ -24,11 +23,14 @@ type EventReceived = {
   args: StakeChangedArgs & MarketCreatedArgs
 }
 
+type Props = {
+  connected?: boolean
+}
+
 type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string };
 
-const EventsList = () => {
-  const { data } = useAccount();
-  const { contract } = useConnectedContract();
+const EventsList = ({connected = true}:Props) => {
+  const contractAddress:string = process.env.REACT_APP_CONTRACT_ADDRESS || '';
   const [events, setEvents] = useState<EventArgs[]>([]);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const EventsList = () => {
       const logs = await provider.getLogs({
         fromBlock: latestBlock - 9000,
         toBlock: "latest",
-        address: contract?.address,
+        address: contractAddress,
       });
 
       const iface = new ethers.utils.Interface(distabetsABI);
@@ -64,22 +66,21 @@ const EventsList = () => {
       setEvents(parsedEvents);
     }
 
-    if (data && contract) {
-      fetchData();
-    }
-  }, [data, contract]);
+    fetchData();
+
+  }, []);
 
   return (
     <div className={styles.stakesListContainer}>
       <h3>Latest Events</h3>
-      <div className={styles.headerRow}>
+      <div className={classNames(styles.headerRow, connected ? styles.connected : null)}>
         <span>Event</span>
-        <span>Market</span>
+        {connected && <span>Market</span>}
         <span className={styles.user}>Address</span>
         <span className={styles.amount}>Amount</span>
       </div>
       {events.length > 0 && events?.map((event:EventArgs, index:number) => (
-        <EventsListRow key={index} event={event} />
+        <EventsListRow key={index} event={event} connected={connected} />
       ))}
     </div>
   )
