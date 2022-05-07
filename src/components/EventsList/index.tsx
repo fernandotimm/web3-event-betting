@@ -30,12 +30,15 @@ type Props = {
 type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string };
 
 const EventsList = ({connected = true}:Props) => {
-  const contractAddress:string = process.env.REACT_APP_CONTRACT_ADDRESS || '';
   const [events, setEvents] = useState<EventArgs[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+      const contractAddress:string = process.env.REACT_APP_CONTRACT_ADDRESS || '';
+      const provider = new ethers.providers.InfuraProvider(
+        "ropsten",
+        process.env.REACT_APP_PROVIDER_API_KEY
+      );
       const latestBlock = await provider.getBlockNumber();
       const logs = await provider.getLogs({
         fromBlock: latestBlock - 9000,
