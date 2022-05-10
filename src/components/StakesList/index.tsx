@@ -52,9 +52,13 @@ const StakesList = () => {
         <span className={styles.amount}>Amount</span>
         <span></span>
       </div>
-      {stakes.length > 0 && stakes?.map((stake:UserStake, index:number) => (
-        <StakesListRow key={index} stake={stake} />
-      ))}
+      {stakes.length > 0 ?
+        stakes?.map((stake:UserStake, index:number) => (
+          <StakesListRow key={index} stake={stake} />
+        ))
+      :
+        <span className={styles.noResults}>You did not stake yet</span>
+      }
     </div>
   )
 }

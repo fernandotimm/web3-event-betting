@@ -8,4 +8,21 @@
   font-size: 1.5rem;
   align-items: center;
   padding: 20px;
+
+  .leftContainer {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    .menu {
+      display: flex;
+      gap: 15px;
+
+      a {
+        color: $colorWhite;
+        font-size: 1.2rem;
+        text-decoration: none;
+      }
+    }
+  }
+
 }

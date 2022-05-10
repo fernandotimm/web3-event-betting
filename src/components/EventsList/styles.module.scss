@@ -6,6 +6,12 @@
   max-width: 800px;
   padding-top: 20px;
 
+  .noResults {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+
   .headerRow {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

@@ -18,7 +18,7 @@ const WalletWidget = () => {
       <div className={styles.walletWidget}>
       {data ?
           <>
-            Connected to {simplifyWalletAddress(data.address || '')}
+            <span className={styles.connectedTo}>Connected to {simplifyWalletAddress(data.address || '')}</span>
             <button onClick={() => disconnect()}>Disconnect</button>
           </>
       :

@@ -9,6 +9,19 @@
   flex-direction: column;
   gap: 20px;
 
+  .tabNav {
+    display: flex;
+    gap: 15px;
+
+    .tab {
+      cursor: pointer;
+      &.active {
+        text-decoration: underline;
+        font-weight: 600;
+      }
+    }
+  }
+
   .numberOfMarkets {
     font-size: 1rem;
     text-transform: uppercase;
