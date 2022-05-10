@@ -63,7 +63,7 @@ const StakesListRow = ({stake}:Props) => {
     <div className={styles.stakeRow}>
       <span>{marketQuestion}</span>
       <span>{outcome}</span>
-      <span className={styles.amount}>{+stake.amount / 10**18} rETH</span>
+      <span className={styles.amount}>{+stake.amount / 10**18} MATIC</span>
       <button disabled={(+stake.amount / 10**18) === 0} onClick={handleCashout}>Cashout</button>
     </div>
   )

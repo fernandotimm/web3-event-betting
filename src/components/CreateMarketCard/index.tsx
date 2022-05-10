@@ -48,7 +48,7 @@ const CreateMarketCard = () => {
           ))}
           <button onClick={handleAddOutcome}>+</button>
         </div>
-        {/* <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>rETH</span></span> */}
+        {/* <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>MATIC</span></span> */}
 
       </div>
       <button onClick={handleCreateMarket}>Create Event</button>

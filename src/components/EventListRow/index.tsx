@@ -59,7 +59,7 @@ const EventsListRow = ({event, connected}:Props) => {
       <span>{event.eventName}</span>
       {connected && <span>{marketQuestion}</span>}
       <span className={styles.user}>{event.user && simplifyWalletAddress(event.user)}</span>
-      <span className={styles.amount}>{event.amount && `${event.amount} rETH`}</span>
+      <span className={styles.amount}>{event.amount && `${event.amount} MATIC`}</span>
     </div>
   )
 }

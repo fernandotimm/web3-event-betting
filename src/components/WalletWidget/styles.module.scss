@@ -8,5 +8,11 @@
     gap: 20px;
     align-items: center;
     font-size: 1rem;
+
+    @media (max-width:$screen-xs) {
+      .connectedTo {
+        display: none;
+      }
+    }
   }
 }

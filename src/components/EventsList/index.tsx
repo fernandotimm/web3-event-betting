@@ -36,12 +36,12 @@ const EventsList = ({connected = true}:Props) => {
     const fetchData = async () => {
       const contractAddress:string = process.env.REACT_APP_CONTRACT_ADDRESS || '';
       const provider = new ethers.providers.InfuraProvider(
-        "ropsten",
+        "maticmum",
         process.env.REACT_APP_PROVIDER_API_KEY
       );
       const latestBlock = await provider.getBlockNumber();
       const logs = await provider.getLogs({
-        fromBlock: latestBlock - 9000,
+        fromBlock: latestBlock - 3499, //max block size limited to 3500 (Infura Polygon)
         toBlock: "latest",
         address: contractAddress,
       });
@@ -75,16 +75,20 @@ const EventsList = ({connected = true}:Props) => {
 
   return (
     <div className={styles.stakesListContainer}>
-      <h3>Latest Events</h3>
+      <h3>Latest Activity</h3>
       <div className={classNames(styles.headerRow, connected ? styles.connected : null)}>
-        <span>Event</span>
+        <span>Activity</span>
         {connected && <span>Market</span>}
         <span className={styles.user}>Address</span>
         <span className={styles.amount}>Amount</span>
       </div>
-      {events.length > 0 && events?.map((event:EventArgs, index:number) => (
-        <EventsListRow key={index} event={event} connected={connected} />
-      ))}
+      {events.length > 0 ?
+        events?.map((event:EventArgs, index:number) => (
+          <EventsListRow key={index} event={event} connected={connected} />
+        ))
+      :
+          <span className={styles.noResults}>There is no activity</span>
+      }
     </div>
   )
 }

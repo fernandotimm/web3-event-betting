@@ -1,13 +1,13 @@
 import { useAccount } from 'wagmi';
 import styles from './styles.module.scss';
 import { BigNumberish, ethers } from 'ethers';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useEffect } from 'react';
 import MarketCard from '../../components/MarketCard';
 import useConnectedContract from '../../hooks/useConnectedContract';
 import CreateMarketCard from '../../components/CreateMarketCard';
-import StakesList from '../../components/StakesList';
 import EventsList from '../../components/EventsList';
+import classNames from 'classnames';
 
 interface Market {
   id: string,
@@ -18,11 +18,15 @@ interface Market {
   totalStake: number
 }
 
+const states = ['OPEN', 'CLOSED', 'CANCELED'];
+
 const Home = () => {
   const { data } = useAccount();
   const { contract } = useConnectedContract();
   const [lastIndex, setLastIndex] = useState<number>(0);
   const [markets, setMarkets] = useState<Market[]>();
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [currentStateIndex, setCurrentStateIndex] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,12 +53,17 @@ const Home = () => {
 
       // console.log({marketsArray});
       setMarkets(marketsArray);
+      setLoaded(true);
     }
 
     if (data && contract) {
       fetchData();
     }
   }, [data, contract]);
+
+  const handleTabClick = useCallback((stateIndex:number) => {
+    setCurrentStateIndex(stateIndex);
+  }, []);
 
   if (!data?.connector) {
     return (
@@ -70,15 +79,19 @@ const Home = () => {
       {data?.connector && <>
         <div className={styles.numberOfMarkets}><span className={styles.amount}>{lastIndex}</span> events on-chain</div>
 
+        <div className={styles.tabNav}>
+          {states.map((stateName, index) => (
+            <span key={index} className={classNames(styles.tab, stateName === states[currentStateIndex] ? styles.active : null)} onClick={() => handleTabClick(index)}>{stateName}</span>
+          ))}
+        </div>
+
         <div className={styles.marketsOverview}>
-          {!markets?.length && <span className={styles.status}>Loading...</span>}
-          {markets?.map((market, index) => (
+          {!loaded && <span className={styles.status}>Loading...</span>}
+          {markets?.filter(market => market.state === currentStateIndex).map((market, index) => (
             <MarketCard key={index} market={market} />
           ))}
           <CreateMarketCard />
         </div>
-
-        <StakesList />
 
       </>}
       <EventsList />

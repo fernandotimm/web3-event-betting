@@ -39,6 +39,7 @@ const MarketCard = ({market}:Props) => {
   return (
     <div className={styles.marketContainer}>
       <div className={styles.questionContainer}>
+        {/* <span className={styles.question}>{states[market.state]}</span> */}
         <span className={styles.question}>{market.question}</span>
         <div className={styles.outcomes}>
           {market.outcomes?.map((outcome, index) => (
@@ -51,10 +52,10 @@ const MarketCard = ({market}:Props) => {
             </button>
           ))}
         </div>
-        <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>rETH</span></span>
+        <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>MATIC</span></span>
         <button onClick={handlePlaceBet}>Place Bet</button>
       </div>
-      <div className={styles.liquidity}>Total Staked: {ethers.utils.formatEther(market.totalStake.toString())} <span>rETH</span></div>
+      <div className={styles.liquidity}>Total Staked: {ethers.utils.formatEther(market.totalStake.toString())} <span>MATIC</span></div>
     </div>
   )
 }

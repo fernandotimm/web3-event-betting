@@ -1,0 +1,11 @@
+@import '../../styles/all';
+
+.stakesContainer {
+  background: $colorSecondary;
+  padding: 20px;
+  margin: 0 auto;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
