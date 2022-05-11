@@ -1,11 +1,10 @@
-import { Contract, Signer } from "ethers";
+import { Contract, ContractInterface, Signer } from "ethers";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import distabetsABI from "../abis/distabets.json";
+import { getAbis } from "../utils/commons";
 
 
-const useConnectedContract = () => {
-  const contractAddress:string = process.env.REACT_APP_CONTRACT_ADDRESS || '';
+const useConnectedContract = (contractAddress:string = '') => {
   const { data } = useAccount();
   const [contract, setContract] = useState<Contract | undefined>();
 
@@ -18,9 +17,10 @@ const useConnectedContract = () => {
       const signer:Signer | undefined = await data?.connector?.getSigner();
 
       if (signer) {
+        const selectedABI:ContractInterface = getAbis()[contractAddress];
         const contract:Contract = new Contract(
           contractAddress,
-          distabetsABI,
+          selectedABI,
           signer,
         );
 

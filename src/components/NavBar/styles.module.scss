@@ -13,6 +13,22 @@
     display: flex;
     gap: 20px;
     align-items: center;
+
+    .desktop {
+      width: 180px;
+      @media (max-width:$screen-xs) {
+        display: none;
+      }
+    }
+
+    .mobile {
+      width: 50px;
+      display: none;
+      @media (max-width:$screen-xs) {
+        display:block;
+      }
+    }
+
     .menu {
       display: flex;
       gap: 15px;

@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 import distabetsABI from "../../abis/distabets.json";
 import EventsListRow from '../EventListRow';
 import classNames from 'classnames';
+import Spinner from '../Spinner';
 
 interface StakeChangedArgs {
   stakeId: string,
@@ -31,10 +32,11 @@ type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string };
 
 const EventsList = ({connected = true}:Props) => {
   const [events, setEvents] = useState<EventArgs[]>([]);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const contractAddress:string = process.env.REACT_APP_CONTRACT_ADDRESS || '';
+      const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
       const provider = new ethers.providers.InfuraProvider(
         "maticmum",
         process.env.REACT_APP_PROVIDER_API_KEY
@@ -67,6 +69,7 @@ const EventsList = ({connected = true}:Props) => {
       });
 
       setEvents(parsedEvents);
+      setLoaded(true);
     }
 
     fetchData();
@@ -75,7 +78,7 @@ const EventsList = ({connected = true}:Props) => {
 
   return (
     <div className={styles.stakesListContainer}>
-      <h3>Latest Activity</h3>
+      <h3>Recent Activity</h3>
       <div className={classNames(styles.headerRow, connected ? styles.connected : null)}>
         <span>Activity</span>
         {connected && <span>Market</span>}
@@ -87,7 +90,10 @@ const EventsList = ({connected = true}:Props) => {
           <EventsListRow key={index} event={event} connected={connected} />
         ))
       :
-          <span className={styles.noResults}>There is no activity</span>
+        <>
+          {!loaded && <Spinner />}
+          {loaded && <span className={styles.noResults}>There is no recent activity</span>}
+        </>
       }
     </div>
   )

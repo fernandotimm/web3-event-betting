@@ -31,8 +31,9 @@ type Props = {
 }
 
 const EventsListRow = ({event, connected}:Props) => {
+  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
   const { data } = useAccount();
-  const { contract } = useConnectedContract();
+  const { contract } = useConnectedContract(contractAddress);
   const [marketQuestion, setMarketQuestion] = useState<string>();
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const EventsListRow = ({event, connected}:Props) => {
       <span>{event.eventName}</span>
       {connected && <span>{marketQuestion}</span>}
       <span className={styles.user}>{event.user && simplifyWalletAddress(event.user)}</span>
-      <span className={styles.amount}>{event.amount && `${event.amount} MATIC`}</span>
+      <span className={styles.amount}>{event.amount && `${event.amount} WFAIR`}</span>
     </div>
   )
 }

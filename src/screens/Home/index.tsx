@@ -8,6 +8,8 @@ import useConnectedContract from '../../hooks/useConnectedContract';
 import CreateMarketCard from '../../components/CreateMarketCard';
 import EventsList from '../../components/EventsList';
 import classNames from 'classnames';
+import Spinner from '../../components/Spinner';
+import SpendingLimit from '../../components/SpendingLimit';
 
 interface Market {
   id: string,
@@ -21,8 +23,9 @@ interface Market {
 const states = ['OPEN', 'CLOSED', 'CANCELED'];
 
 const Home = () => {
+  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
   const { data } = useAccount();
-  const { contract } = useConnectedContract();
+  const { contract } = useConnectedContract(contractAddress);
   const [lastIndex, setLastIndex] = useState<number>(0);
   const [markets, setMarkets] = useState<Market[]>();
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -77,6 +80,7 @@ const Home = () => {
   return (
     <div className={styles.homeContainer}>
       {data?.connector && <>
+        <SpendingLimit />
         <div className={styles.numberOfMarkets}><span className={styles.amount}>{lastIndex}</span> events on-chain</div>
 
         <div className={styles.tabNav}>
@@ -86,7 +90,7 @@ const Home = () => {
         </div>
 
         <div className={styles.marketsOverview}>
-          {!loaded && <span className={styles.status}>Loading...</span>}
+          {!loaded && <span className={styles.status}><Spinner /></span>}
           {markets?.filter(market => market.state === currentStateIndex).map((market, index) => (
             <MarketCard key={index} market={market} />
           ))}
