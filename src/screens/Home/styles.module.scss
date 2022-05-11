@@ -11,11 +11,14 @@
 
   .tabNav {
     display: flex;
-    gap: 15px;
+    gap: 2px;
 
     .tab {
       cursor: pointer;
+      background: $colorTertiary20;
+      padding: 10px 20px;
       &.active {
+        background: $colorTertiary50;
         text-decoration: underline;
         font-weight: 600;
       }

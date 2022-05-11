@@ -13,8 +13,9 @@ interface UserStake {
 }
 
 const StakesList = () => {
+  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
   const { data } = useAccount();
-  const { contract } = useConnectedContract();
+  const { contract } = useConnectedContract(contractAddress);
   const [stakes, setStakes] = useState<UserStake[]>([]);
 
   useEffect(() => {

@@ -5,7 +5,8 @@ import useConnectedContract from '../../hooks/useConnectedContract';
 import styles from './styles.module.scss';
 
 const CreateMarketCard = () => {
-  const { contract } = useConnectedContract();
+  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
+  const { contract } = useConnectedContract(contractAddress);
   const [outcomes, setOutcomes] = useState<string[]>([]);
   const [title, setTitle] = useState<string>('');
 
@@ -48,7 +49,7 @@ const CreateMarketCard = () => {
           ))}
           <button onClick={handleAddOutcome}>+</button>
         </div>
-        {/* <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>MATIC</span></span> */}
+        {/* <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>WFAIR</span></span> */}
 
       </div>
       <button onClick={handleCreateMarket}>Create Event</button>

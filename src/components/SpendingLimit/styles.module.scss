@@ -1,0 +1,39 @@
+@import '../../styles/all';
+
+.spendingLimit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .note {
+    font-size:0.8rem;
+  }
+
+  & > div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    input {
+      width: 200px;
+    }
+
+    .changeButton {
+      border: 0;
+      background: none;
+      color: $colorWhite;
+      text-decoration: underline;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .approveButton {
+      border: 1px solid $colorTertiary;
+      border-radius: 6px;
+      background: none;
+      color: $colorWhite;
+      outline: none;
+    }
+  }
+
+}

@@ -4,7 +4,8 @@ import { useCallback } from 'react';
 import { useState } from 'react';
 import useConnectedContract from '../../hooks/useConnectedContract';
 import styles from './styles.module.scss';
-
+import { toast } from 'react-toastify';
+import { commify } from 'ethers/lib/utils';
 interface Market {
   id: string,
   question: string,
@@ -14,17 +15,37 @@ interface Market {
   totalStake: number,
 }
 
+interface TransactionError extends Error {
+  data?: {
+    message:string
+  };
+}
+
 type Props = {
   market: Market;
 }
 
 const MarketCard = ({market}:Props) => {
-  const { contract } = useConnectedContract();
+  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
+  const { contract } = useConnectedContract(contractAddress);
   const [selectedOutcome, setSelectedOutcome] = useState<number>();
-  const [betAmount, setBetAmount] = useState<number>(0.01);
+  const [betAmount, setBetAmount] = useState<number>(10);
 
-  const handlePlaceBet = useCallback(() => {
-    contract?.addStake(market.id, selectedOutcome, {value: ethers.utils.parseUnits(String(betAmount), "ether")});
+  const handlePlaceBet = useCallback(async () => {
+    if (selectedOutcome === undefined || !betAmount) {
+      console.log('Select outcome and bet amount.')
+      toast.error("Select outcome and bet amount.");
+      return;
+    }
+
+    try {
+      await contract?.addStake(market.id, selectedOutcome, ethers.utils.parseUnits(String(betAmount)));
+
+    }catch(e) {
+      console.log(e);
+      toast.error((e as TransactionError).data?.message || (e as Error).message);
+    }
+
   }, [contract, betAmount, market.id, selectedOutcome]);
 
   const handleOutcomeSelected = useCallback((index:number) => {
@@ -52,10 +73,10 @@ const MarketCard = ({market}:Props) => {
             </button>
           ))}
         </div>
-        <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>MATIC</span></span>
+        <span className={styles.amountBet}><input type="number" step={1} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>WFAIR</span></span>
         <button onClick={handlePlaceBet}>Place Bet</button>
       </div>
-      <div className={styles.liquidity}>Total Staked: {ethers.utils.formatEther(market.totalStake.toString())} <span>MATIC</span></div>
+      <div className={styles.liquidity}>Total Staked: {commify(ethers.utils.formatEther(market.totalStake.toString()))} <span>WFAIR</span></div>
     </div>
   )
 }

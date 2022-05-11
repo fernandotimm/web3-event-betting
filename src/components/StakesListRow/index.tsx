@@ -23,8 +23,9 @@ type Props = {
 }
 
 const StakesListRow = ({stake}:Props) => {
+  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
   const { data } = useAccount();
-  const { contract } = useConnectedContract();
+  const { contract } = useConnectedContract(contractAddress);
   const [marketQuestion, setMarketQuestion] = useState<string>();
   const [outcome, setOutcome] = useState<string>();
 
@@ -63,7 +64,7 @@ const StakesListRow = ({stake}:Props) => {
     <div className={styles.stakeRow}>
       <span>{marketQuestion}</span>
       <span>{outcome}</span>
-      <span className={styles.amount}>{+stake.amount / 10**18} MATIC</span>
+      <span className={styles.amount}>{+stake.amount / 10**18} WFAIR</span>
       <button disabled={(+stake.amount / 10**18) === 0} onClick={handleCashout}>Cashout</button>
     </div>
   )

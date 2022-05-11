@@ -4,6 +4,9 @@ import NavBar from './components/NavBar';
 import Home from './screens/Home';
 import Stakes from './screens/Stakes';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
   const client = createClient({
     autoConnect: true,
@@ -17,6 +20,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/stakes" element={<Stakes />} />
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
     </WagmiProvider>
   );

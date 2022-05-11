@@ -1,5 +1,16 @@
 [
     {
+        "inputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "token_",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
@@ -48,25 +59,6 @@
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "address",
-                "name": "previousOwner",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "OwnershipTransferred",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
                 "internalType": "uint256",
                 "name": "stakeId",
                 "type": "uint256"
@@ -97,12 +89,17 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_marketId",
+                "name": "marketId_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_outcomeId",
+                "name": "outcomeId_",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount_",
                 "type": "uint256"
             }
         ],
@@ -114,24 +111,24 @@
                 "type": "uint256"
             }
         ],
-        "stateMutability": "payable",
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [
             {
                 "internalType": "string",
-                "name": "_title",
+                "name": "title_",
                 "type": "string"
             },
             {
                 "internalType": "string",
-                "name": "_image",
+                "name": "image_",
                 "type": "string"
             },
             {
                 "internalType": "bytes32[]",
-                "name": "_outcomeNames",
+                "name": "outcomeNames_",
                 "type": "bytes32[]"
             }
         ],
@@ -150,7 +147,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_marketId",
+                "name": "marketId_",
                 "type": "uint256"
             }
         ],
@@ -207,7 +204,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_marketId",
+                "name": "marketId_",
                 "type": "uint256"
             }
         ],
@@ -226,7 +223,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "stakeId",
+                "name": "stakeId_",
                 "type": "uint256"
             }
         ],
@@ -267,17 +264,17 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_holder",
+                "name": "holder_",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_marketId",
+                "name": "marketId_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_outcomeId",
+                "name": "outcomeId_",
                 "type": "uint256"
             }
         ],
@@ -296,7 +293,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_address",
+                "name": "address_",
                 "type": "address"
             }
         ],
@@ -312,28 +309,15 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_stakeId",
+                "name": "stakeId_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "amount_",
                 "type": "uint256"
             }
         ],
@@ -345,25 +329,38 @@
                 "type": "uint256"
             }
         ],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "inputs": [
+        "inputs": [],
+        "name": "token",
+        "outputs": [
             {
-                "internalType": "address",
-                "name": "newOwner",
+                "internalType": "contract IERC20",
+                "name": "",
                 "type": "address"
             }
         ],
-        "name": "transferOwnership",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "tokenBalance",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "updateBalance",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

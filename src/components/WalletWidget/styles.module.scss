@@ -9,6 +9,14 @@
     align-items: center;
     font-size: 1rem;
 
+    button {
+      border: 1px solid $colorTertiary;
+      color: $colorWhite;
+      outline: none;
+      background: none;
+      border-radius: 6px;
+    }
+
     @media (max-width:$screen-xs) {
       .connectedTo {
         display: none;

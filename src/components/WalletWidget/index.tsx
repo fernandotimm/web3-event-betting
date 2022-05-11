@@ -22,7 +22,7 @@ const WalletWidget = () => {
             <button onClick={() => disconnect()}>Disconnect</button>
           </>
       :
-          <button onClick={() => connect()}>Connect Wallet</button>
+          <button onClick={() => connect()}>Connect</button>
       }
       </div>
     </div>
