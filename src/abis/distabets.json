@@ -98,6 +98,11 @@
                 "type": "string"
             },
             {
+                "internalType": "uint256",
+                "name": "closingTime_",
+                "type": "uint256"
+            },
+            {
                 "internalType": "bytes32[]",
                 "name": "outcomeNames_",
                 "type": "bytes32[]"
