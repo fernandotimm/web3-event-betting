@@ -1,11 +1,14 @@
 import classNames from 'classnames';
-import { ethers } from 'ethers';
-import { useCallback } from 'react';
+import { ContractTransaction, ethers } from 'ethers';
+import { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import useConnectedContract from '../../hooks/useConnectedContract';
 import styles from './styles.module.scss';
 import { toast } from 'react-toastify';
 import { commify } from 'ethers/lib/utils';
+import Spinner from '../Spinner';
+import { useWaitForTransaction } from 'wagmi';
+
 interface Market {
   id: string,
   question: string,
@@ -27,26 +30,54 @@ type Props = {
 
 const MarketCard = ({market}:Props) => {
   const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
-  const { contract } = useConnectedContract(contractAddress);
+  const tokenAddress:string = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS || '';
+  const { contract : tokenContract } = useConnectedContract(tokenAddress);
   const [selectedOutcome, setSelectedOutcome] = useState<number>();
   const [betAmount, setBetAmount] = useState<number>(10);
+  const [transaction, setTransaction] = useState<ContractTransaction>();
+
+  const {isLoading, isSuccess} = useWaitForTransaction({
+    hash: transaction?.hash,
+  });
+
+  // console.log({waitForTransaction});
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('You successfully placed a bet!');
+    }
+
+  }, [isSuccess]);
 
   const handlePlaceBet = useCallback(async () => {
+
     if (selectedOutcome === undefined || !betAmount) {
       console.log('Select outcome and bet amount.')
-      toast.error("Select outcome and bet amount.");
+      toast.error('Select outcome and bet amount.');
       return;
     }
 
     try {
-      await contract?.addStake(market.id, selectedOutcome, ethers.utils.parseUnits(String(betAmount)));
+      /*
+      * Calls approveAndCall method of the token smart contract (ERC-1363)
+      * which approves the spending amount and further calls the (callback)
+      * method addStake(uint256, uint256) on the distabets smart contract.
+      */
+
+      // console.log(Math.floor(deadlineDate.getTime() / 1000))
+
+      const addStakeParams = ethers.utils.defaultAbiCoder.encode(["uint256", "uint256"], [market.id, selectedOutcome]);
+      if (tokenContract) {
+        const transaction = await tokenContract["approveAndCall(address,uint256,bytes)"](contractAddress, ethers.utils.parseEther(`${betAmount}`), addStakeParams);
+        setTransaction(transaction);
+      }
 
     }catch(e) {
       console.log(e);
       toast.error((e as TransactionError).data?.message || (e as Error).message);
     }
 
-  }, [contract, betAmount, market.id, selectedOutcome]);
+  }, [betAmount, market.id, selectedOutcome, tokenContract, contractAddress]);
 
   const handleOutcomeSelected = useCallback((index:number) => {
     setSelectedOutcome(index);
@@ -59,6 +90,10 @@ const MarketCard = ({market}:Props) => {
 
   return (
     <div className={styles.marketContainer}>
+      {isLoading && <div className={styles.loadingLayer}>
+        <Spinner />
+        {transaction?.hash && <a href={`https://mumbai.polygonscan.com/tx/${transaction?.hash}`} target="_blank" rel="noreferrer">See transaction</a>}
+      </div>}
       <div className={styles.questionContainer}>
         {/* <span className={styles.question}>{states[market.state]}</span> */}
         <span className={styles.question}>{market.question}</span>
@@ -73,6 +108,7 @@ const MarketCard = ({market}:Props) => {
             </button>
           ))}
         </div>
+
         <span className={styles.amountBet}><input type="number" step={1} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>WFAIR</span></span>
         <button onClick={handlePlaceBet}>Place Bet</button>
       </div>

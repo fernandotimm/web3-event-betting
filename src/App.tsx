@@ -6,10 +6,15 @@ import Stakes from './screens/Stakes';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { providers } from 'ethers';
 
 const App = () => {
+  const INFURA_KEY = process.env.REACT_APP_PROVIDER_API_KEY;
   const client = createClient({
     autoConnect: true,
+    provider(config) {
+      return new providers.InfuraProvider(config.chainId, INFURA_KEY);
+    },
   });
 
   return (

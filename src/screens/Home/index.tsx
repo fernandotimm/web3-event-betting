@@ -9,7 +9,7 @@ import CreateMarketCard from '../../components/CreateMarketCard';
 import EventsList from '../../components/EventsList';
 import classNames from 'classnames';
 import Spinner from '../../components/Spinner';
-import SpendingLimit from '../../components/SpendingLimit';
+import TokenBalance from '../../components/TokenBalance';
 
 interface Market {
   id: string,
@@ -26,7 +26,6 @@ const Home = () => {
   const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
   const { data } = useAccount();
   const { contract } = useConnectedContract(contractAddress);
-  const [lastIndex, setLastIndex] = useState<number>(0);
   const [markets, setMarkets] = useState<Market[]>();
   const [loaded, setLoaded] = useState<boolean>(false);
   const [currentStateIndex, setCurrentStateIndex] = useState<number>(0);
@@ -36,7 +35,6 @@ const Home = () => {
       const lastIdxBN:BigNumberish = await contract?.getMarketIndex();
       // console.log(lastIdxBN);
       const lastIdx:number = +lastIdxBN.toString();
-      setLastIndex(lastIdx);
 
       const marketsArray : Market[] = [];
 
@@ -80,8 +78,8 @@ const Home = () => {
   return (
     <div className={styles.homeContainer}>
       {data?.connector && <>
-        <SpendingLimit />
-        <div className={styles.numberOfMarkets}><span className={styles.amount}>{lastIndex}</span> events on-chain</div>
+        <TokenBalance />
+        {/* <div className={styles.numberOfMarkets}><span className={styles.amount}>{lastIndex}</span> events on-chain</div> */}
 
         <div className={styles.tabNav}>
           {states.map((stateName, index) => (
