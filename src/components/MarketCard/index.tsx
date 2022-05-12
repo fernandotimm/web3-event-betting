@@ -95,7 +95,6 @@ const MarketCard = ({market}:Props) => {
         {transaction?.hash && <a href={`https://mumbai.polygonscan.com/tx/${transaction?.hash}`} target="_blank" rel="noreferrer">See transaction</a>}
       </div>}
       <div className={styles.questionContainer}>
-        {/* <span className={styles.question}>{states[market.state]}</span> */}
         <span className={styles.question}>{market.question}</span>
         <div className={styles.outcomes}>
           {market.outcomes?.map((outcome, index) => (
@@ -112,6 +111,7 @@ const MarketCard = ({market}:Props) => {
         <span className={styles.amountBet}><input type="number" step={1} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>WFAIR</span></span>
         <button onClick={handlePlaceBet}>Place Bet</button>
       </div>
+      <span className={styles.liquidity}>{`State: ${market.state}`}</span>
       <div className={styles.liquidity}>Total Staked: {commify(ethers.utils.formatEther(market.totalStake.toString()))} <span>WFAIR</span></div>
     </div>
   )

@@ -14,8 +14,8 @@ const CreateMarketCard = () => {
   const handleCreateMarket = useCallback(() => {
     const image:string = "https://wallfair-storage-production.s3.eu-central-1.amazonaws.com/62286e0952d81593f82e417e/wallfair-logo.jpg" //todo
     const convertedOutcomes = outcomes.map((outcome:string) => ethers.utils.formatBytes32String(outcome));
-    contract?.createMarket(title, image, convertedOutcomes);
-  }, [contract, title, outcomes]);
+    contract?.createMarket(title, image, deadlineDate.getTime() / 1000, convertedOutcomes);
+  }, [contract, title, outcomes, deadlineDate]);
 
   const handleTitleChange = useCallback((event:React.FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
