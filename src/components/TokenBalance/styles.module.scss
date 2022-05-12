@@ -1,0 +1,12 @@
+@import '../../styles/all';
+
+.tokenBalance {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  span {
+    color: $colorTertiary;
+    font-weight: 600;
+  }
+}

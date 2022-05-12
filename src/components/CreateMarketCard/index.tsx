@@ -9,6 +9,7 @@ const CreateMarketCard = () => {
   const { contract } = useConnectedContract(contractAddress);
   const [outcomes, setOutcomes] = useState<string[]>([]);
   const [title, setTitle] = useState<string>('');
+  const [deadlineDate, setDeadlineDate] = useState<Date>(new Date());
 
   const handleCreateMarket = useCallback(() => {
     const image:string = "https://wallfair-storage-production.s3.eu-central-1.amazonaws.com/62286e0952d81593f82e417e/wallfair-logo.jpg" //todo
@@ -22,7 +23,7 @@ const CreateMarketCard = () => {
   }, []);
 
   const handleAddOutcome = useCallback(() => {
-    setOutcomes([...outcomes, 'option']);
+    setOutcomes([...outcomes, '']);
   }, [outcomes]);
 
   const handleChangeOutcome = useCallback((event:React.FormEvent<HTMLInputElement>, idx:number) => {
@@ -38,6 +39,11 @@ const CreateMarketCard = () => {
 
         <input type="text" className={styles.question} value={title} onChange={handleTitleChange} placeholder="Add question" />
 
+        <span className={styles.datePicker}>
+          <span>Event ends at:</span>
+          <input type="datetime-local" onChange={(e) => setDeadlineDate(new Date(e.target.value))} value={deadlineDate.toISOString().slice(0, -8)} required />
+        </span>
+
         <div className={styles.outcomes}>
           {outcomes?.map((outcome, index) => (
             <input
@@ -45,6 +51,7 @@ const CreateMarketCard = () => {
               className={styles.outcome}
               value={outcome}
               onChange={event => handleChangeOutcome(event, index)}
+              placeholder="option"
             />
           ))}
           <button onClick={handleAddOutcome}>+</button>
