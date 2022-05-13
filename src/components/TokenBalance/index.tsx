@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import useConnectedContract from '../../hooks/useConnectedContract';
 import styles from './styles.module.scss';
+import {ReactComponent as WFAIRLogo} from '../../assets/wfair-logo.svg';
 
 const TokenBalance = () => {
   const tokenAddress:string = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS || '';
@@ -24,7 +25,9 @@ const TokenBalance = () => {
 
   return (
     <div className={styles.tokenBalance}>
-      <span>Token Balance: {`${commify(tokenBalance)} WFAIR`}</span>
+      <WFAIRLogo />
+      <span>{`${commify(tokenBalance)}`}</span>
+      <span className={styles.tokenName}>WFAIR</span>
     </div>
   )
 }

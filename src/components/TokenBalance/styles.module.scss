@@ -2,11 +2,27 @@
 
 .tokenBalance {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 10px;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: $colorLightPurple16;
+
+  .tokenName {
+    @media (max-width: $screen-xs) {
+      display: none;
+    }
+  }
+
+  svg {
+    width: 25px;
+    height: 25px;
+  }
 
   span {
-    color: $colorTertiary;
-    font-weight: 600;
+    color: $colorWhite;
+    font-size: 1rem;
   }
 }
