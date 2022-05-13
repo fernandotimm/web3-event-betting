@@ -2,6 +2,8 @@ import { ethers } from 'ethers';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import useConnectedContract from '../../hooks/useConnectedContract';
+import Button from '../Button';
+import ButtonTheme from '../Button/ButtonTheme';
 import styles from './styles.module.scss';
 
 const CreateMarketCard = () => {
@@ -54,12 +56,12 @@ const CreateMarketCard = () => {
               placeholder="option"
             />
           ))}
-          <button onClick={handleAddOutcome}>+</button>
+          <Button theme={ButtonTheme.secondaryButton} onClick={handleAddOutcome}>+</Button>
         </div>
         {/* <span className={styles.amountBet}><input type="number" step={0.001} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>WFAIR</span></span> */}
 
       </div>
-      <button onClick={handleCreateMarket}>Create Event</button>
+      <Button theme={ButtonTheme.primaryButtonS} onClick={handleCreateMarket}>Create Event</Button>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import Stakes from './screens/Stakes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { providers } from 'ethers';
+import Market from './screens/Market';
 
 const App = () => {
   const INFURA_KEY = process.env.REACT_APP_PROVIDER_API_KEY;
@@ -23,6 +24,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/event/:id" element={<Market />} />
           <Route path="/stakes" element={<Stakes />} />
         </Routes>
         <ToastContainer />

@@ -9,7 +9,6 @@ import CreateMarketCard from '../../components/CreateMarketCard';
 import EventsList from '../../components/EventsList';
 import classNames from 'classnames';
 import Spinner from '../../components/Spinner';
-import TokenBalance from '../../components/TokenBalance';
 
 interface Market {
   id: string,
@@ -78,9 +77,8 @@ const Home = () => {
   return (
     <div className={styles.homeContainer}>
       {data?.connector && <>
-        <TokenBalance />
         {/* <div className={styles.numberOfMarkets}><span className={styles.amount}>{lastIndex}</span> events on-chain</div> */}
-
+        <h1>Events</h1>
         <div className={styles.tabNav}>
           {states.map((stateName, index) => (
             <span key={index} className={classNames(styles.tab, stateName === states[currentStateIndex] ? styles.active : null)} onClick={() => handleTabClick(index)}>{stateName}</span>

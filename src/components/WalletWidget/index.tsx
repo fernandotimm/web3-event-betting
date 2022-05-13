@@ -2,6 +2,8 @@ import styles from './styles.module.scss';
 import { chain, useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { simplifyWalletAddress } from '../../utils/commons';
+import ButtonTheme from '../Button/ButtonTheme';
+import Button from '../Button';
 
 const WalletWidget = () => {
 
@@ -17,12 +19,9 @@ const WalletWidget = () => {
     <div className={styles.walletWidgetContainer}>
       <div className={styles.walletWidget}>
       {data ?
-          <>
-            <span className={styles.connectedTo}>Connected to {simplifyWalletAddress(data.address || '')}</span>
-            <button onClick={() => disconnect()}>Disconnect</button>
-          </>
+        <Button title="Disconnect" theme={ButtonTheme.secondaryButton} onClick={() => disconnect()}>{simplifyWalletAddress(data.address || '')}</Button>
       :
-          <button onClick={() => connect()}>Connect</button>
+        <Button theme={ButtonTheme.primaryButtonL} onClick={() => connect()}>Connect</Button>
       }
       </div>
     </div>

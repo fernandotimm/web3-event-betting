@@ -1,8 +1,9 @@
 @import '../../styles/all';
 
 .homeContainer {
+  max-width: $screen-lg;
   background: $colorSecondary;
-  padding: 20px;
+  padding: 50px 20px 20px;
   margin: 0 auto;
   font-size: 1rem;
   display: flex;
@@ -11,15 +12,16 @@
 
   .tabNav {
     display: flex;
-    gap: 2px;
+    gap: 5px;
+    border-bottom: 1px solid $colorWhite50;
 
     .tab {
       cursor: pointer;
-      background: $colorTertiary20;
-      padding: 10px 20px;
+      padding: 10px 20px 3px;
+      color: $colorWhite50;
       &.active {
-        background: $colorTertiary50;
-        text-decoration: underline;
+        color: $colorWhite;
+        border-bottom: 2px solid $colorPrimary;
         font-weight: 600;
       }
     }

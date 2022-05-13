@@ -16,11 +16,5 @@
       background: none;
       border-radius: 6px;
     }
-
-    @media (max-width:$screen-xs) {
-      .connectedTo {
-        display: none;
-      }
-    }
   }
 }

@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { commify } from 'ethers/lib/utils';
 import Spinner from '../Spinner';
 import { useWaitForTransaction } from 'wagmi';
+import ButtonTheme from '../Button/ButtonTheme';
+import Button from '../Button';
 
 interface Market {
   id: string,
@@ -109,7 +111,7 @@ const MarketCard = ({market}:Props) => {
         </div>
 
         <span className={styles.amountBet}><input type="number" step={1} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>WFAIR</span></span>
-        <button onClick={handlePlaceBet}>Place Bet</button>
+        <Button theme={ButtonTheme.primaryButtonS} onClick={handlePlaceBet}>Place Bet</Button>
       </div>
       <span className={styles.liquidity}>{`State: ${market.state}`}</span>
       <div className={styles.liquidity}>Total Staked: {commify(ethers.utils.formatEther(market.totalStake.toString()))} <span>WFAIR</span></div>

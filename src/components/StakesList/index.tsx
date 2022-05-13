@@ -46,7 +46,7 @@ const StakesList = () => {
 
   return (
     <div className={styles.stakesListContainer}>
-      <h3>My Stakes</h3>
+      <h1>My Stakes</h1>
       <div className={styles.headerRow}>
         <span>Market</span>
         <span>Outcome</span>

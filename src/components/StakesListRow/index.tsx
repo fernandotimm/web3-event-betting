@@ -3,6 +3,8 @@ import { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import useConnectedContract from '../../hooks/useConnectedContract';
+import Button from '../Button';
+import ButtonTheme from '../Button/ButtonTheme';
 import styles from './styles.module.scss';
 
 interface UserStake {
@@ -65,7 +67,7 @@ const StakesListRow = ({stake}:Props) => {
       <span>{marketQuestion}</span>
       <span>{outcome}</span>
       <span className={styles.amount}>{+stake.amount / 10**18} WFAIR</span>
-      <button disabled={(+stake.amount / 10**18) === 0} onClick={handleCashout}>Cashout</button>
+      <Button theme={ButtonTheme.secondaryButton} disabled={(+stake.amount / 10**18) === 0} onClick={handleCashout}>Cashout</Button>
     </div>
   )
 }
