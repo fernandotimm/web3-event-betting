@@ -1,29 +1,11 @@
-import classNames from 'classnames';
-import { ContractTransaction, ethers } from 'ethers';
-import { useCallback, useEffect } from 'react';
 import { useState } from 'react';
-import useConnectedContract from '../../hooks/useConnectedContract';
+import { Link } from 'react-router-dom';
+import { diffTime } from '../../utils/commons';
 import styles from './styles.module.scss';
-import { toast } from 'react-toastify';
-import { commify } from 'ethers/lib/utils';
-import Spinner from '../Spinner';
-import { useWaitForTransaction } from 'wagmi';
-import ButtonTheme from '../Button/ButtonTheme';
-import Button from '../Button';
-
 interface Market {
   id: string,
   question: string,
   image: string,
-  outcomes: string[],
-  state: number,
-  totalStake: number,
-}
-
-interface TransactionError extends Error {
-  data?: {
-    message:string
-  };
 }
 
 type Props = {
@@ -31,91 +13,49 @@ type Props = {
 }
 
 const MarketCard = ({market}:Props) => {
-  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
-  const tokenAddress:string = process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS || '';
-  const { contract : tokenContract } = useConnectedContract(tokenAddress);
-  const [selectedOutcome, setSelectedOutcome] = useState<number>();
-  const [betAmount, setBetAmount] = useState<number>(10);
-  const [transaction, setTransaction] = useState<ContractTransaction>();
 
-  const {isLoading, isSuccess} = useWaitForTransaction({
-    hash: transaction?.hash,
-  });
+  const [eventEnd] = useState<Date>(new Date('2022-05-17'));
 
-  // console.log({waitForTransaction});
-
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success('You successfully placed a bet!');
-    }
-
-  }, [isSuccess]);
-
-  const handlePlaceBet = useCallback(async () => {
-
-    if (selectedOutcome === undefined || !betAmount) {
-      console.log('Select outcome and bet amount.')
-      toast.error('Select outcome and bet amount.');
-      return;
-    }
-
-    try {
-      /*
-      * Calls approveAndCall method of the token smart contract (ERC-1363)
-      * which approves the spending amount and further calls the (callback)
-      * method addStake(uint256, uint256) on the distabets smart contract.
-      */
-
-      // console.log(Math.floor(deadlineDate.getTime() / 1000))
-
-      const addStakeParams = ethers.utils.defaultAbiCoder.encode(["uint256", "uint256"], [market.id, selectedOutcome]);
-      if (tokenContract) {
-        const transaction = await tokenContract["approveAndCall(address,uint256,bytes)"](contractAddress, ethers.utils.parseEther(`${betAmount}`), addStakeParams);
-        setTransaction(transaction);
-      }
-
-    }catch(e) {
-      console.log(e);
-      toast.error((e as TransactionError).data?.message || (e as Error).message);
-    }
-
-  }, [betAmount, market.id, selectedOutcome, tokenContract, contractAddress]);
-
-  const handleOutcomeSelected = useCallback((index:number) => {
-    setSelectedOutcome(index);
-  }, []);
-
-  const handleBetAmountChange = useCallback((event:React.FormEvent<HTMLInputElement>) => {
-    const value = event.currentTarget.value;
-    setBetAmount(+value);
-  }, []);
+  const [days, hours, minutes] = diffTime(eventEnd, new Date(Date.now()));
 
   return (
-    <div className={styles.marketContainer}>
-      {isLoading && <div className={styles.loadingLayer}>
-        <Spinner />
-        {transaction?.hash && <a href={`https://mumbai.polygonscan.com/tx/${transaction?.hash}`} target="_blank" rel="noreferrer">See transaction</a>}
-      </div>}
-      <div className={styles.questionContainer}>
-        <span className={styles.question}>{market.question}</span>
-        <div className={styles.outcomes}>
-          {market.outcomes?.map((outcome, index) => (
-            <button
-              key={index}
-              className={classNames(styles.outcome, selectedOutcome === index ? styles.active : null)}
-              onClick={() => handleOutcomeSelected(index)}
-            >
-              {outcome}
-            </button>
-          ))}
-        </div>
+    <Link
+      to={`/market/${market.id}`}
+      className={styles.marketContainer}
+    >
+      <img
+        className={styles.thumb}
+        alt={`Uploaded file`}
+        src={market.image.indexOf('https://') === 0 ? market.image : "https://ipfs.infura.io/ipfs/" + market.image}
+      />
 
-        <span className={styles.amountBet}><input type="number" step={1} placeholder="Bet amount in ETH" onChange={handleBetAmountChange} value={betAmount} /><span>WFAIR</span></span>
-        <Button theme={ButtonTheme.primaryButtonS} onClick={handlePlaceBet}>Place Bet</Button>
+      <div className={styles.overlay} />
+      <div className={styles.betCard}>
+        <span className={styles.title}>{market.question}</span>
       </div>
-      <span className={styles.liquidity}>{`State: ${market.state}`}</span>
-      <div className={styles.liquidity}>Total Staked: {commify(ethers.utils.formatEther(market.totalStake.toString()))} <span>WFAIR</span></div>
-    </div>
+
+      {eventEnd && eventEnd > new Date() ? (
+        <div className={styles.timerContainer}>
+          <div className={styles.contentWrapper}>
+            <span className={styles.timerLabel}>Ends in: </span>
+            <span className={styles.timerValue}>{days || 0}</span>
+            <span className={styles.timerUnit}>{days === 1 ? `day` : `days`}</span>
+            <span className={styles.timerValue}>{hours || 0}</span>
+            <span className={styles.timerUnit}>hrs </span>
+            <span className={styles.timerValue}>{minutes || 0}</span>
+            <span className={styles.timerUnit}>min </span>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.timerContainer}>
+          <div className={styles.contentWrapper}>
+            <span className={styles.timerLabel}>
+              {'Event ended'}
+            </span>
+          </div>
+        </div>
+      )}
+    </Link>
   )
 }
 
