@@ -1,0 +1,140 @@
+@import '../../styles/all';
+
+.marketContainer {
+  background: $colorBgCardItem;
+  border-radius: 8px;
+  width: 15rem;
+  height: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  position: relative;
+
+  .loadingLayer {
+    position: absolute;
+    background: $colorBgCardItemLoading;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: inherit;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+
+    a {
+      color: $colorWhite;
+    }
+  }
+
+  @media (max-width: $screen-xs) {
+    width: 100%;
+  }
+
+  .questionContainer {
+    display: flex;
+    flex-direction: column;
+
+    .question {
+      font-weight: 600;
+    }
+
+    .outcomes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 20px 0;
+      .outcome {
+        background: transparent;
+        color: $colorWhite;
+        border-radius: 8px;
+        text-transform: uppercase;
+        border: 1px solid;
+        width: fit-content;
+        padding: 5px 10px;
+        max-width: 150px;
+        min-width: 50px;
+        text-align: center;
+        font-size: 1rem;
+
+        user-select: none;
+        cursor: pointer;
+
+        &:nth-child(1) {
+          border-color: $colorChoiceColorOne;
+          &.active {
+            background: $colorChoiceColorOne20;
+            font-weight: 700;
+          }
+        }
+        &:nth-child(2) {
+          border-color: $colorChoiceColorTwo;
+          &.active {
+            background: $colorChoiceColorTwo20;
+            font-weight: 700;
+          }
+        }
+        &:nth-child(3) {
+          border-color: $colorChoiceColorThree;
+          &.active {
+            background: $colorChoiceColorThree20;
+            font-weight: 700;
+          }
+        }
+        &:nth-child(4) {
+          border-color: $colorChoiceColorFour;
+          &.active {
+            background: $colorChoiceColorFour20;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+
+    .amountBet {
+      display: flex;
+      column-gap: 5px;
+      align-items: center;
+      padding: 0 0 10px;
+
+      & > input {
+        width: 143px;
+        text-align: right;
+        border-radius: 6px;
+        border: 0;
+        background: $colorLightPurple16;
+        color: $colorWhite;
+        outline: none;
+      }
+    }
+
+    & > button {
+      border-radius: 5px;
+      border: 0;
+      background: $colorPrimary;
+      font-weight: 900;
+      cursor: pointer;
+    }
+  }
+
+  .liquidity {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    span {
+      text-transform: none;
+    }
+  }
+
+  .stakes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

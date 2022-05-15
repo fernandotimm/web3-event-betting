@@ -9,4 +9,14 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  .backButton {
+    color: $colorWhite;
+    text-decoration: none;
+  }
+
+  .topContainer {
+    display: flex;
+    justify-content: space-between;
+  }
 }

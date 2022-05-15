@@ -24,7 +24,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/event/:id" element={<Market />} />
+          <Route path="/market/:marketIdParam" element={<Market />} />
           <Route path="/stakes" element={<Stakes />} />
         </Routes>
         <ToastContainer />
