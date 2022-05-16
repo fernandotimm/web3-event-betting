@@ -23,10 +23,8 @@ const Market = () => {
   const { data } = useAccount();
   const { contract } = useConnectedContract(contractAddress);
   const [market, setMarket] = useState<MarketData>();
-  const [loaded, setLoaded] = useState<boolean>(false);
-
+  // const [loaded, setLoaded] = useState<boolean>(false);
   const marketId:number = parseInt(marketIdParam || '');
-
 
   useEffect(() => {
 
@@ -41,7 +39,7 @@ const Market = () => {
         state: market[2],
         totalStake: market[3]
       });
-      setLoaded(true);
+      // setLoaded(true);
     }
 
     if (data && contract && marketId) {
