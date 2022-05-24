@@ -1,4 +1,4 @@
-# web3-event-betting
+# Web3 Event Betting Client
 
 ### `npm start`
 
