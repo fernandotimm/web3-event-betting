@@ -3,8 +3,8 @@ const axios = require("axios");
 exports.handler = async function(event, context) {
     let body = JSON.parse(event.body);
 
-    body.events.forEach((event) => {
-        event.matchReasons.forEach((obj) => {
+    for (let event of body.events) {
+        for (let obj of event.matchReasons) {
             let { marketId, oracle, closingTime, numOutcomes } = obj.params;
             
             const response = await axios.post(
@@ -30,8 +30,8 @@ exports.handler = async function(event, context) {
             );
 
             console.log(response.status, response.data);
-        });
-    });
+        };
+    };
     return {
         statusCode: 200,
         body: "OK"
