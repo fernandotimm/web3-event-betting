@@ -6,8 +6,11 @@ exports.handler = async function(event, context) {
 
     let json = JSON.parse(event.body);
 
+    await distamarkets.init();
+
     let markets = await distamarkets.findMarkets(json.filter, json.options);
 
+    await distamarkets.close();
     return {
         statusCode: 200,
         body: JSON.stringify(markets)
