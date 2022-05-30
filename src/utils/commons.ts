@@ -1,6 +1,7 @@
 import { ContractInterface } from 'ethers';
 import {distabetsABI, wfairABI} from '../abis';
 
+
 const simplifyWalletAddress = (addr:string):string => {
   return `${addr.substring(0, 4)}...${addr.substring(addr.length - 4)}`;
 }
@@ -28,8 +29,16 @@ const diffTime = (date1: Date, date2: Date):[number, number, number, number] => 
   return [days, hours, minutes, seconds]
 }
 
+const toBase64 = (file:File) => new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = error => reject(error);
+});
+
 export {
   simplifyWalletAddress,
   getAbis,
   diffTime,
+  toBase64,
 }

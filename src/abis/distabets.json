@@ -15,21 +15,27 @@
         "inputs": [
             {
                 "indexed": true,
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
+            },
+            {
+                "indexed": true,
                 "internalType": "address",
-                "name": "creator",
+                "name": "oracle_",
                 "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "marketId",
+                "name": "closingTime_",
                 "type": "uint256"
             },
             {
                 "indexed": false,
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
+                "internalType": "uint256",
+                "name": "numOutcomes_",
+                "type": "uint256"
             }
         ],
         "name": "MarketCreated",
@@ -40,14 +46,20 @@
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "uint256",
+                "internalType": "bytes32",
                 "name": "marketId",
-                "type": "uint256"
+                "type": "bytes32"
             },
             {
-                "indexed": false,
+                "indexed": true,
                 "internalType": "enum Distamarkets.MarketState",
-                "name": "",
+                "name": "oldState",
+                "type": "uint8"
+            },
+            {
+                "indexed": true,
+                "internalType": "enum Distamarkets.MarketState",
+                "name": "newState",
                 "type": "uint8"
             }
         ],
@@ -59,20 +71,14 @@
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "uint256",
-                "name": "stakeId",
-                "type": "uint256"
+                "internalType": "bytes32",
+                "name": "marketId",
+                "type": "bytes32"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
-            {
-                "indexed": true,
-                "internalType": "uint256",
-                "name": "marketId",
+                "name": "outcomeId_",
                 "type": "uint256"
             },
             {
@@ -80,6 +86,18 @@
                 "internalType": "address",
                 "name": "user",
                 "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "oldBalance",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "newBalance",
+                "type": "uint256"
             }
         ],
         "name": "StakeChanged",
@@ -88,14 +106,56 @@
     {
         "inputs": [
             {
-                "internalType": "string",
-                "name": "title_",
-                "type": "string"
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
             },
             {
-                "internalType": "string",
-                "name": "image_",
-                "type": "string"
+                "internalType": "uint256",
+                "name": "outcomeId_",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "user_",
+                "type": "address"
+            }
+        ],
+        "name": "calculateReward",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
+            }
+        ],
+        "name": "cancelMarket",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "address",
+                "name": "oracle_",
+                "type": "address"
             },
             {
                 "internalType": "uint256",
@@ -103,201 +163,99 @@
                 "type": "uint256"
             },
             {
-                "internalType": "bytes32[]",
-                "name": "outcomeNames_",
-                "type": "bytes32[]"
-            }
-        ],
-        "name": "createMarket",
-        "outputs": [
-            {
                 "internalType": "uint256",
-                "name": "",
+                "name": "numOutcomes_",
                 "type": "uint256"
             }
         ],
+        "name": "createMarket",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [
             {
-                "internalType": "uint256",
+                "internalType": "bytes32",
                 "name": "marketId_",
-                "type": "uint256"
+                "type": "bytes32"
             }
         ],
         "name": "getMarket",
         "outputs": [
             {
-                "internalType": "string",
+                "internalType": "address",
                 "name": "",
-                "type": "string"
+                "type": "address"
             },
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            },
-            {
-                "internalType": "enum Distamarkets.MarketState",
-                "name": "",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes32[]",
-                "name": "",
-                "type": "bytes32[]"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "",
-                "type": "uint256[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getMarketIndex",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "marketId_",
-                "type": "uint256"
-            }
-        ],
-        "name": "getMarketTotalStake",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "stakeId_",
-                "type": "uint256"
-            }
-        ],
-        "name": "getStake",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "marketId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "outcomeId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "amount",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "user",
-                        "type": "address"
-                    }
-                ],
-                "internalType": "struct Distamarkets.UserStake",
-                "name": "",
-                "type": "tuple"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
             {
                 "internalType": "address",
-                "name": "holder_",
+                "name": "",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "marketId_",
+                "name": "",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "enum Distamarkets.MarketState",
+                "name": "state",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
             },
             {
                 "internalType": "uint256",
                 "name": "outcomeId_",
                 "type": "uint256"
-            }
-        ],
-        "name": "getStakeId",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
+            },
             {
                 "internalType": "address",
-                "name": "address_",
+                "name": "user_",
                 "type": "address"
             }
         ],
-        "name": "getUserStakes",
+        "name": "getStake",
         "outputs": [
-            {
-                "internalType": "uint256[]",
-                "name": "",
-                "type": "uint256[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
             {
                 "internalType": "uint256",
-                "name": "marketId_",
-                "type": "uint256"
-            }
-        ],
-        "name": "isMarketOpen",
-        "outputs": [
-            {
-                "internalType": "bool",
                 "name": "",
-                "type": "bool"
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -335,8 +293,31 @@
     {
         "inputs": [
             {
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
+            },
+            {
                 "internalType": "uint256",
-                "name": "stakeId_",
+                "name": "outcomeId_",
+                "type": "uint256"
+            }
+        ],
+        "name": "refund",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "outcomeId_",
                 "type": "uint256"
             },
             {
@@ -346,13 +327,25 @@
             }
         ],
         "name": "removeStake",
-        "outputs": [
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
+            },
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "finalOutcomeId_",
                 "type": "uint256"
             }
         ],
+        "name": "resolveMarket",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -385,6 +378,24 @@
     {
         "inputs": [],
         "name": "updateBalance",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "marketId_",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "uint256",
+                "name": "outcomeId_",
+                "type": "uint256"
+            }
+        ],
+        "name": "withdrawReward",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

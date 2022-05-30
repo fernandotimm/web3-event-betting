@@ -1,42 +1,34 @@
 import { ethers } from 'ethers';
+import { CID, IPFSHTTPClient } from 'ipfs-http-client';
 import { useCallback } from 'react';
 import { useState } from 'react';
-import useConnectedContract from '../../hooks/useConnectedContract';
+import useCreateMarket from '../../hooks/useCreateMarket';
+
+import useIFPFS from '../../hooks/useIPFS';
+import { toBase64 } from '../../utils/commons';
 import Button from '../Button';
 import ButtonTheme from '../Button/ButtonTheme';
 import styles from './styles.module.scss';
-import { create, CID, IPFSHTTPClient } from "ipfs-http-client";
+
 
 const CreateMarketCard = () => {
-  const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
-  const { contract } = useConnectedContract(contractAddress);
+  const {createMarket} = useCreateMarket();
   const [outcomes, setOutcomes] = useState<string[]>([]);
   const [title, setTitle] = useState<string>('');
-  const [deadlineDate, setDeadlineDate] = useState<Date>(new Date());
-  const [image, setImage] = useState<{cid: CID; path: string}>();
-
-  // const projectId = "<YOUR PROJECT ID>";
-  // const projectSecret = "<YOUR PROJECT SECRET>";
-  // const authorization = "Basic " + btoa(projectId + ":" + projectSecret);
-
-  let ipfs: IPFSHTTPClient | undefined;
-  try {
-    ipfs = create({
-      url: "https://ipfs.infura.io:5001/api/v0",
-      // headers: {
-      //   authorization,
-      // },
-
-    });
-  } catch (error) {
-    console.error("IPFS error ", error);
-    ipfs = undefined;
-  }
+  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [imageBase64, setImageBase64] = useState<string | ArrayBuffer | null>(''); //useState<{cid: CID; path: string}>();
+  const ipfs = useIFPFS();
 
   const handleCreateMarket = useCallback(() => {
-    const convertedOutcomes = outcomes.map((outcome:string) => ethers.utils.formatBytes32String(outcome));
-    contract?.createMarket(title, image?.cid.toV1().toString() || '', deadlineDate.getTime() / 1000, convertedOutcomes);
-  }, [contract, title, outcomes, deadlineDate, image]);
+    // const convertedOutcomes = outcomes.map((outcome:string) => ethers.utils.formatBytes32String(outcome));
+    // createMarket(title, image?.cid.toV1().toString() || '', deadlineDate.getTime() / 1000, convertedOutcomes);
+    createMarket({
+      title,
+      outcomes,
+      imageBase64,
+      endDate
+    })
+  }, [title, outcomes, endDate, imageBase64, createMarket]);
 
   const handleTitleChange = useCallback((event:React.FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
@@ -54,25 +46,31 @@ const CreateMarketCard = () => {
     setOutcomes([...newOutcomes]);
   }, [outcomes]);
 
-  const onSubmitHandler = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleImageSelect = useCallback(async (event: React.FormEvent<HTMLInputElement>) => {
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const files = (form[0] as HTMLInputElement).files;
+    // const {files} = event.target as HTMLInputElement;
+    // const files = (form[0] as HTMLInputElement).files;
+
+    const files:FileList | null = (event.target as HTMLInputElement).files;
 
     if (!files || files.length === 0) {
       return alert("No files selected");
     }
 
-    const file = files[0];
-    const result = await (ipfs as IPFSHTTPClient).add(file);
+    const fileBase64 = await toBase64(files[0]);
+    console.log(fileBase64);
+    if (fileBase64) {
+      setImageBase64(fileBase64);
+    }
+    // const result = await (ipfs as IPFSHTTPClient).add(file);
 
-    setImage({
-      cid: result.cid,
-      path: result.path,
-    });
+    // setImage({
+    //   cid: result.cid,
+    //   path: result.path,
+    // });
 
     //form.reset();
-  }, [ipfs]);
+  }, []);
 
   return (
     <div className={styles.marketContainer}>
@@ -83,19 +81,13 @@ const CreateMarketCard = () => {
       )}
 
       {ipfs && (
-          <form onSubmit={onSubmitHandler}>
-            <input name="file" type="file" />
-
-            <button type="submit">Upload File</button>
-          </form>
+        <input onChange={handleImageSelect} multiple={false} name="file" type="file" />
       )}
 
-      {image && (
+      {imageBase64 && (
         <img
           alt={`Uploaded file`}
-          src={"https://ipfs.infura.io/ipfs/" + image.path}
-          style={{ maxWidth: "200px", margin: "15px" }}
-          key={image.cid.toString()}
+          src={String(imageBase64)}
         />
       )}
 
@@ -103,7 +95,7 @@ const CreateMarketCard = () => {
 
         <span className={styles.datePicker}>
           <span>Event ends at:</span>
-          <input type="datetime-local" onChange={(e) => setDeadlineDate(new Date(e.target.value))} value={deadlineDate.toISOString().slice(0, -8)} required />
+          <input type="datetime-local" onChange={(e) => setEndDate(new Date(e.target.value))} value={endDate.toISOString().slice(0, -8)} required />
         </span>
 
         <div className={styles.outcomes}>

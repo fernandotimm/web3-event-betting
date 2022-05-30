@@ -1,10 +1,12 @@
-import { ethers } from 'ethers';
+
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { fetchJSONfromIPFS } from '../../api';
 import MarketBet from '../../components/MarketBet';
 import useConnectedContract from '../../hooks/useConnectedContract';
+import { getIpfsHashFromBytes32 } from '../../utils/conversion';
 import styles from './styles.module.scss';
 
 interface MarketData {
@@ -12,7 +14,7 @@ interface MarketData {
   question: string,
   image: string,
   outcomes: string[],
-  state: number,
+  state: string,
   totalStake: number
 }
 
@@ -24,28 +26,29 @@ const Market = () => {
   const { contract } = useConnectedContract(contractAddress);
   const [market, setMarket] = useState<MarketData>();
   // const [loaded, setLoaded] = useState<boolean>(false);
-  const marketId:number = parseInt(marketIdParam || '');
 
   useEffect(() => {
 
     const fetchData = async () => {
-      const market = await contract?.getMarket(marketId);
-      const outcomes:string[] = market[4].map((hexOutcome:string) => { return ethers.utils.parseBytes32String(hexOutcome)});
+      const market = await contract?.getMarket(marketIdParam);
+      const ipfsCID = getIpfsHashFromBytes32(marketIdParam);
+      const jsonData = await fetchJSONfromIPFS(ipfsCID);
+
       setMarket({
-        id: String(marketId),
-        question: market[0],
-        image: market[1],
-        outcomes: outcomes,
-        state: market[2],
-        totalStake: market[3]
+        id: String(marketIdParam),
+        question: jsonData.title ?? jsonData.question,
+        image: jsonData.imageBase64,
+        outcomes: jsonData.outcomes,
+        state: String(market[8]),
+        totalStake: market[5]
       });
       // setLoaded(true);
     }
 
-    if (data && contract && marketId) {
+    if (data && contract && marketIdParam) {
       fetchData();
     }
-  }, [data, contract, marketId]);
+  }, [data, contract, marketIdParam]);
 
   return (
     <div className={styles.marketContainer}>

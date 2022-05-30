@@ -26,7 +26,7 @@ const MarketCard = ({market}:Props) => {
       <img
         className={styles.thumb}
         alt={`Uploaded file`}
-        src={market.image.indexOf('https://') === 0 ? market.image : "https://ipfs.infura.io/ipfs/" + market.image}
+        src={market.image}
       />
 
       <div className={styles.overlay} />
