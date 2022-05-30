@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { diffTime } from '../../utils/commons';
 import styles from './styles.module.scss';
