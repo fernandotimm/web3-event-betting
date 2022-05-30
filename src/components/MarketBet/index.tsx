@@ -16,7 +16,7 @@ interface Market {
   question: string,
   image: string,
   outcomes: string[],
-  state: number,
+  state: string,
   totalStake: number,
 }
 
@@ -96,15 +96,17 @@ const MarketCard = ({market}:Props) => {
         <Spinner />
         {transaction?.hash && <a href={`https://mumbai.polygonscan.com/tx/${transaction?.hash}`} target="_blank" rel="noreferrer">See transaction</a>}
       </div>}
-      <div className={styles.questionContainer}>
       {market.image && (
-        <img
-          alt={`Uploaded file`}
-          src={market.image.indexOf('https://') === 0 ? market.image : "https://ipfs.infura.io/ipfs/" + market.image}
-          style={{ maxWidth: "200px", margin: "15px" }}
-          key={market.image}
-        />
+        <div className={styles.imageContainer}>
+          <div className={styles.imageWrapper}>
+            <img
+              alt={`Uploaded file`}
+              src={market.image}
+            />
+          </div>
+        </div>
       )}
+      <div className={styles.questionContainer}>
         <span className={styles.question}>{market.question}</span>
         <div className={styles.outcomes}>
           {market.outcomes?.map((outcome, index) => (
@@ -122,7 +124,7 @@ const MarketCard = ({market}:Props) => {
         <Button theme={ButtonTheme.primaryButtonS} onClick={handlePlaceBet}>Place Bet</Button>
       </div>
       <span className={styles.liquidity}>{`State: ${market.state}`}</span>
-      <div className={styles.liquidity}>Total Staked: {commify(ethers.utils.formatEther(market.totalStake.toString()))} <span>WFAIR</span></div>
+      <div className={styles.staked}>Total Staked: {commify(ethers.utils.formatEther(market.totalStake.toString()))} <span>WFAIR</span></div>
     </div>
   )
 }

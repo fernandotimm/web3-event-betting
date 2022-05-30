@@ -1,6 +1,5 @@
 import { useAccount } from 'wagmi';
 import styles from './styles.module.scss';
-import { BigNumberish, ethers } from 'ethers';
 import { useCallback, useState } from 'react';
 import { useEffect } from 'react';
 import MarketCard from '../../components/MarketCard';
@@ -9,17 +8,28 @@ import CreateMarketCard from '../../components/CreateMarketCard';
 import EventsList from '../../components/EventsList';
 import classNames from 'classnames';
 import Spinner from '../../components/Spinner';
+import { getIpfsHashFromBytes32 } from '../../utils/conversion';
+import { fetchJSONfromIPFS } from '../../api';
 
 interface Market {
   id: string,
   question: string,
   image: string,
   outcomes: string[],
-  state: number,
+  state: string,
   totalStake: number
+  endDate: Date,
 }
 
-const states = ['OPEN', 'CLOSED', 'CANCELED'];
+type MarketState = {
+  [k:string]: string,
+}
+
+const states:MarketState = {
+  '0': 'OPEN',
+  '1': 'CLOSED',
+  '2': 'CANCELED'
+};
 
 const Home = () => {
   const contractAddress:string = process.env.REACT_APP_DISTAMARKETS_CONTRACT_ADDRESS || '';
@@ -27,31 +37,47 @@ const Home = () => {
   const { contract } = useConnectedContract(contractAddress);
   const [markets, setMarkets] = useState<Market[]>();
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [currentStateIndex, setCurrentStateIndex] = useState<number>(0);
+  const [currentStateIndex, setCurrentStateIndex] = useState<string>('0');
 
   useEffect(() => {
     const fetchData = async () => {
-      const lastIdxBN:BigNumberish = await contract?.getMarketIndex();
-      // console.log(lastIdxBN);
-      const lastIdx:number = +lastIdxBN.toString();
+      //DEV MOCK
+      const knownMarketIds:string[] = ['0xa91828f71d688dd3a7cb1b99637daa7f56b31d7df14dc43310fcda7ae561377f', '0x3446b07728e67a68e7f86829942137887799234b46cb20e6c0bcdd5ae9917bba'];
 
       const marketsArray : Market[] = [];
 
-      for (let i:number = 1; i <= lastIdx; i++) {
-        const market = await contract?.getMarket(i);
-        // console.log(market);
-        const outcomes:string[] = market[4].map((hexOutcome:string) => { return ethers.utils.parseBytes32String(hexOutcome)});
+      for (let marketId of knownMarketIds) {
+        const market = await contract?.getMarket(marketId);
+
+        // Response structure getMarket() from distabets smart contract
+        //  [
+        //     oracle,
+        //     creator,
+        //     numOutcomes,
+        //     closingTime,
+        //     disputeEnd,
+        //     totalStake,
+        //     finalOutcomeId,
+        //     feeCollected,
+        //     state
+        //  ]
+
+        const ipfsCID = getIpfsHashFromBytes32(marketId);
+        const jsonData = await fetchJSONfromIPFS(ipfsCID);
+        console.log(jsonData);
+
         marketsArray.push({
-          id: String(i),
-          question: market[0],
-          image: market[1],
-          outcomes: outcomes,
-          state: market[2],
-          totalStake: market[3]
+          id: String(marketId),
+          question: jsonData.title ?? jsonData.question,
+          image: jsonData.imageBase64,
+          outcomes: jsonData.outcomes,
+          state: String(market[8]),
+          totalStake: market[5],
+          endDate: new Date(market[3] * 1000),
         })
       }
 
-      // console.log({marketsArray});
+      console.log({marketsArray});
       setMarkets(marketsArray);
       setLoaded(true);
     }
@@ -61,7 +87,7 @@ const Home = () => {
     }
   }, [data, contract]);
 
-  const handleTabClick = useCallback((stateIndex:number) => {
+  const handleTabClick = useCallback((stateIndex:string) => {
     setCurrentStateIndex(stateIndex);
   }, []);
 
@@ -77,11 +103,10 @@ const Home = () => {
   return (
     <div className={styles.homeContainer}>
       {data?.connector && <>
-        {/* <div className={styles.numberOfMarkets}><span className={styles.amount}>{lastIndex}</span> events on-chain</div> */}
         <h1>Events</h1>
         <div className={styles.tabNav}>
-          {states.map((stateName, index) => (
-            <span key={index} className={classNames(styles.tab, stateName === states[currentStateIndex] ? styles.active : null)} onClick={() => handleTabClick(index)}>{stateName}</span>
+          {Object.entries(states).map(([stateKey, stateValue]) => (
+            <span key={stateKey} className={classNames(styles.tab, stateKey === currentStateIndex ? styles.active : null)} onClick={() => handleTabClick(stateKey)}>{stateValue}</span>
           ))}
         </div>
 
