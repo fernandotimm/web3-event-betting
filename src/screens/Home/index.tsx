@@ -18,6 +18,7 @@ interface Market {
   outcomes: string[],
   state: string,
   totalStake: number
+  endDate: Date,
 }
 
 type MarketState = {
@@ -36,7 +37,7 @@ const Home = () => {
   const { contract } = useConnectedContract(contractAddress);
   const [markets, setMarkets] = useState<Market[]>();
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [currentStateIndex, setCurrentStateIndex] = useState<string>('1');
+  const [currentStateIndex, setCurrentStateIndex] = useState<string>('0');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,7 +72,8 @@ const Home = () => {
           image: jsonData.imageBase64,
           outcomes: jsonData.outcomes,
           state: String(market[8]),
-          totalStake: market[5]
+          totalStake: market[5],
+          endDate: new Date(market[3] * 1000),
         })
       }
 

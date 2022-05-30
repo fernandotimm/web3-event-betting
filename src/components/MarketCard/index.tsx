@@ -6,6 +6,7 @@ interface Market {
   id: string,
   question: string,
   image: string,
+  endDate: Date,
 }
 
 type Props = {
@@ -14,9 +15,7 @@ type Props = {
 
 const MarketCard = ({market}:Props) => {
 
-  const [eventEnd] = useState<Date>(new Date('2022-05-17'));
-
-  const [days, hours, minutes] = diffTime(eventEnd, new Date(Date.now()));
+  const [days, hours, minutes] = diffTime(market.endDate, new Date(Date.now()));
 
   return (
     <Link
@@ -34,7 +33,7 @@ const MarketCard = ({market}:Props) => {
         <span className={styles.title}>{market.question}</span>
       </div>
 
-      {eventEnd && eventEnd > new Date() ? (
+      {market.endDate && market.endDate > new Date() ? (
         <div className={styles.timerContainer}>
           <div className={styles.contentWrapper}>
             <span className={styles.timerLabel}>Ends in: </span>
@@ -50,7 +49,7 @@ const MarketCard = ({market}:Props) => {
         <div className={styles.timerContainer}>
           <div className={styles.contentWrapper}>
             <span className={styles.timerLabel}>
-              {'Event ended'}
+              Event Ended
             </span>
           </div>
         </div>

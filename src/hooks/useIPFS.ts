@@ -1,4 +1,4 @@
-import { create, CID, IPFSHTTPClient } from "ipfs-http-client";
+import { create, IPFSHTTPClient } from "ipfs-http-client";
 
 const useIFPFS = () => {
   // const projectId = "<YOUR PROJECT ID>";

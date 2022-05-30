@@ -1,15 +1,11 @@
-import { ethers } from 'ethers';
-import { CID, IPFSHTTPClient } from 'ipfs-http-client';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import useCreateMarket from '../../hooks/useCreateMarket';
-
 import useIFPFS from '../../hooks/useIPFS';
 import { toBase64 } from '../../utils/commons';
 import Button from '../Button';
 import ButtonTheme from '../Button/ButtonTheme';
 import styles from './styles.module.scss';
-
 
 const CreateMarketCard = () => {
   const {createMarket} = useCreateMarket();
@@ -26,7 +22,7 @@ const CreateMarketCard = () => {
       title,
       outcomes,
       imageBase64,
-      endDate
+      endDate,
     })
   }, [title, outcomes, endDate, imageBase64, createMarket]);
 
@@ -48,8 +44,6 @@ const CreateMarketCard = () => {
 
   const handleImageSelect = useCallback(async (event: React.FormEvent<HTMLInputElement>) => {
     event.preventDefault();
-    // const {files} = event.target as HTMLInputElement;
-    // const files = (form[0] as HTMLInputElement).files;
 
     const files:FileList | null = (event.target as HTMLInputElement).files;
 
@@ -62,14 +56,6 @@ const CreateMarketCard = () => {
     if (fileBase64) {
       setImageBase64(fileBase64);
     }
-    // const result = await (ipfs as IPFSHTTPClient).add(file);
-
-    // setImage({
-    //   cid: result.cid,
-    //   path: result.path,
-    // });
-
-    //form.reset();
   }, []);
 
   return (
