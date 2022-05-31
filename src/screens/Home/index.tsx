@@ -42,7 +42,10 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       //DEV MOCK
-      const knownMarketIds:string[] = ['0xa91828f71d688dd3a7cb1b99637daa7f56b31d7df14dc43310fcda7ae561377f', '0x3446b07728e67a68e7f86829942137887799234b46cb20e6c0bcdd5ae9917bba'];
+      const knownMarketIds:string[] = [
+        '0xfa4a37d6b7b8217a6b5f527eaca2ef94b09ee3470a06b4c4c4595dfccd5370c0',
+        '0xf71b5fb6bcb91a12c2a8353881fb5e5fc0650d04b02281cc9423466ad8303931',
+      ];
 
       const marketsArray : Market[] = [];
 
