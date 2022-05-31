@@ -1,8 +1,8 @@
 import bs58 from 'bs58';
 
-function buf2hex(buffer) { // buffer is an ArrayBuffer
+function buf2hex(buffer) {
   return [...new Uint8Array(buffer)]
-      .map(x => x.toString(16))
+      .map(x => x.toString(16).padStart(2, "0"))
       .join('');
 }
 
@@ -10,7 +10,7 @@ function hex2buf(hex) {
 	const buffer = new ArrayBuffer(hex.length / 2);
 	const array = new Uint8Array(buffer);
 	let k = 0;
-	for (let i = 0; i < hex.length; i +=2 ) {
+	for (let i = 0; i < hex.length; i+=2 ) {
 		array[k] = parseInt(hex[i] + hex[i+1], 16);
 		k++;
 	}
@@ -38,10 +38,9 @@ const getIpfsHashFromBytes32 = (bytes32Hex) => {
   // Add our default ipfs values for first 2 bytes:
   // function:0x12=sha2, size:0x20=256 bits
   // and cut off leading "0x"
-  const hashHex = "1220" + bytes32Hex.slice(2)
+  const hashHex = "1220" + bytes32Hex.slice(2);
   const hashBytes = hex2buf(hashHex);
-  const hashStr = bs58.encode(hashBytes)
-  return hashStr
+  return bs58.encode(hashBytes);
 }
 
 export {
