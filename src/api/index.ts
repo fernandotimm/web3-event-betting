@@ -3,7 +3,7 @@ type JSONData = {
     question: string,
     title?:string,
     outcomes: string[],
-    endDate: 12312312312313,
+    endDate: number,
     imageBase64: string
 }
 

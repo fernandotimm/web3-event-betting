@@ -19,8 +19,6 @@ const useCreateMarket = () => {
   const ipfs = useIFPFS();
 
   const createMarket = async ({title, outcomes, imageBase64, endDate}:MarketCreateData) => {
-    // const convertedOutcomes = outcomes.map((outcome:string) => ethers.utils.formatBytes32String(outcome));
-    //marketCreateData.outcomes = convertedOutcomes;
 
     if (!ipfs) {
       return;
@@ -32,21 +30,13 @@ const useCreateMarket = () => {
       endDate
     });
 
-    // const cid = await ipfs.add(
-    //   { path: 'metadata.json', content: stringJSON },
-    //   { wrapWithDirectory: true }
-    // )
-
     const metadata = await (ipfs as IPFSHTTPClient).add(stringJSON);
     const cid = metadata.cid.toV0();
 
     const cidBytes32 = getBytes32FromIpfsHash(cid.toString());
 
     console.log(cid.toString());
-    console.log(cidBytes32);
-
-    // const convertedBack = getIpfsHashFromBytes32(cidBytes32);
-    // console.log(convertedBack)
+    console.log('cidBytes32:', cidBytes32);
 
     contract?.createMarket(cidBytes32, data?.address, endDate.getTime() / 1000, outcomes.length);
   }
