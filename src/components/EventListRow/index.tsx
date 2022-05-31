@@ -7,9 +7,9 @@ import { simplifyWalletAddress } from '../../utils/commons';
 import styles from './styles.module.scss';
 
 interface StakeChangedArgs {
-  stakeId: string,
   marketId: string,
-  amount: string,
+  oldBalance?: string,
+  newBalance?: string,
   user: string,
 }
 
@@ -19,7 +19,7 @@ interface MarketCreatedArgs {
   name: string,
 }
 
-type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string };
+type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string, amount: number };
 
 interface MarketData {
   question: string,
@@ -39,9 +39,9 @@ const EventsListRow = ({event, connected}:Props) => {
   useEffect(() => {
     const fetchData = async () => {
 
-      const marketData = await contract?.getMarket(event.marketId);
-      // console.log(marketData);
-      const question:string = marketData[0].toString();
+      // const marketData = await contract?.getMarket(event.marketId);
+      // console.log({marketData});
+      const question:string = event.marketId; //TODO get market question from JSON data
 
       const market:MarketData = {
         question,

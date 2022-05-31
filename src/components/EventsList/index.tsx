@@ -7,9 +7,9 @@ import classNames from 'classnames';
 import Spinner from '../Spinner';
 
 interface StakeChangedArgs {
-  stakeId: string,
   marketId: string,
-  amount: string,
+  oldBalance?: string,
+  newBalance?: string,
   user: string,
 }
 
@@ -28,7 +28,7 @@ type Props = {
   connected?: boolean
 }
 
-type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string };
+type EventArgs = StakeChangedArgs & MarketCreatedArgs & { eventName: string, amount:number };
 
 const EventsList = ({connected = true}:Props) => {
   const [events, setEvents] = useState<EventArgs[]>([]);
@@ -55,12 +55,16 @@ const EventsList = ({connected = true}:Props) => {
 
       const parsedEvents:EventArgs[] = decodedEvents
       .filter(event => ['MarketCreated','StakeChanged'].includes(event.name))
+      // .filter(event => ['StakeChanged'].includes(event.name))
       .map((event) => {
+        console.log(event);
         const {name, args}:EventReceived = event as unknown as EventReceived;
+        const newBalance = ethers.utils.formatEther(args.oldBalance ?? 0);
+        const oldBalance = ethers.utils.formatEther(args.newBalance ?? 0);
+        const amount = +oldBalance - +newBalance;
         return {
           eventName: name,
-          amount: args.amount ? ethers.utils.formatEther(args.amount) : '',
-          stakeId: args.stakeId?.toString(),
+          amount: amount,
           user: args.user,
           marketId: args.marketId?.toString(),
           creator: args.creator,
